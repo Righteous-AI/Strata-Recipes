@@ -1,0 +1,26 @@
+[Unit]
+Description=Strata 0.2.0-beta FP4-Local Qwen3.8 (port 12345)
+After=network-online.target
+Conflicts=strata-nvfp4.service
+
+[Service]
+Type=simple
+User=strata
+Group=strata
+WorkingDirectory=/opt/strata/Strata
+LimitMEMLOCK=infinity
+LimitNOFILE=1048576
+Environment=HF_HUB_OFFLINE=1
+Environment=TRANSFORMERS_OFFLINE=1
+Environment=HF_DATASETS_OFFLINE=1
+Environment=CUDA_HOME=/usr/local/cuda
+Environment=CUDA_VISIBLE_DEVICES=0
+Environment=PATH=/opt/strata/Strata/.venv/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ExecStart=/opt/strata/Strata/.venv/bin/python -m serve.server --engine strata --config /opt/strata/Strata/strata-fp4-local.json --host 0.0.0.0 --port 12345
+Restart=no
+TimeoutStartSec=0
+TimeoutStopSec=180
+KillMode=mixed
+
+[Install]
+WantedBy=multi-user.target

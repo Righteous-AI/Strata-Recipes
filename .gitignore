@@ -1,0 +1,13 @@
+*.log
+.venv/
+__pycache__/
+.DS_Store
+.env
+.env.*
+data/
+*.bin
+*.gguf
+*.safetensors
+.idea/
+.vscode/
+logs/
