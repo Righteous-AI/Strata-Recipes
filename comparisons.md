@@ -172,6 +172,19 @@ Same greedy prompt both times. 138,235 tokens, nothing reused, then a follow-up 
 
 Cold decode is level. The warm gap follows draft acceptance on this repetitive prompt. The agent table above is the one that decided the running server: on real sessions the two packs decode at the same rate.
 
+### Strata against FreeToken, recipe 4, 2026-10-24
+
+Same host, one engine at a time, same client and prompts (repeated `" fox"`), temperature 0, `max_tokens` 512, one warmup then the median of three measured runs. Strata tree `v0.2.2`, engine `strata 0.1.47`, recipe 4 flags. FreeToken 0.1.3, 200,704 context, no speculative decoding, a different weights pack. Raw Strata files in [`strata-vs-freetoken/`](strata-vs-freetoken/); full write-up in [FreeToken-Recipes](https://github.com/Righteous-AI/FreeToken-Recipes/tree/main/strata-vs-freetoken).
+
+| Prompt tokens | Strata TTFT s | Strata decode tok/s | FreeToken TTFT s | FreeToken decode tok/s |
+| ---: | ---: | ---: | ---: | ---: |
+| 2,100 | 1.288 | 176.8 | 1.350 | 52.9 |
+| 32,820 | 4.614 | 163.1 | 5.532 | 53.8 |
+| 131,124 | 17.642 | 159.7 | 18.596 | 52.8 |
+| 187,912 | 25.776 | 157.8 | 27.220 | 55.0 |
+
+Strata client prefill was 7,112.7–7,432.3 tok/s from 32,820 tokens up. This is a repetitive bench, not the agent rates at the top of this page; the 187,912-token decode (157.8) sits next to the FP4-Local 50k–90k agent median (157.5, n=7).
+
 ---
 
 ## 1,048,576 context with YaRN, not kept

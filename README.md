@@ -136,11 +136,14 @@ configs/strata-nvfp4-nvidia.json  recipe 3
 configs/strata-nvfp4-speed.json   recipe 1, written so the two env lines are visible
 services/strata-engine.service    recipe 4
 monitor/strata_monitor.py         read-only panel for the running server
+strata-vs-freetoken/              2026-10-24 head-to-head, Strata-side raw files
 ```
 
 Weights stay on the machine that converted them. This repo does not ship a model.
 
-Sibling case study, same host, the FreeToken engine: FreeToken NVFP4 on this 5090 (separate write-up). FreeToken's sustained decode on that study was about 56–67 tok/s. These Strata recipes are a different engine and a later measurement.
+Sibling case study, same host, the FreeToken engine: FreeToken NVFP4 on this 5090 ([FreeToken-Recipes](https://github.com/Righteous-AI/FreeToken-Recipes)). FreeToken's sustained decode on that study was about 56–67 tok/s. These Strata recipes are a different engine and a later measurement.
+
+Head-to-head on 2026-10-24, same host, one engine at a time, median of 3 runs, `max_tokens` 512: Strata recipe 4 decoded at 176.8 tok/s with a 2,100-token prompt and 157.8 tok/s at 187,912 tokens; FreeToken decoded at 52.9 and 55.0. Strata runs speculative decoding (`--spec 4`), the FreeToken unit did not, and the weights are different packs. Strata-side files: [`strata-vs-freetoken/`](strata-vs-freetoken/). Full comparison: [FreeToken-Recipes/strata-vs-freetoken](https://github.com/Righteous-AI/FreeToken-Recipes/tree/main/strata-vs-freetoken).
 
 ---
 
