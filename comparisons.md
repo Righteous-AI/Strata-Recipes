@@ -184,3 +184,36 @@ Real agent traffic on the quality stack, 2026-10-17 13:44–14:20. Flags added: 
 | Fresh reads ≥ 100k | **6,916.8** (n=55, best 7,379.4) | **6,568.9** (n=11, best 7,498.2) |
 
 Decode on the prompts this host actually serves was about 11% slower. A 717,131-token prompt (618,827 fresh) prefilled at 5,580 tok/s and decoded at 100.2 tok/s. Reverted. The running context is 262,144.
+
+---
+
+## v0.2.10 DFlash2, FP4-Local, 2026-11-03
+
+Same weights as recipe 4. Engine `0.1.56`, tag v0.2.10. Drafter is DFlash2, spec 6, draft confidence 0.5, fallback none, reserve 192. The agent rows are the boot that started 2026-11-03 08:54 UTC, with the five cold bench requests taken out. Weighted means are `1000 * tokens / milliseconds` on the engine's finished lines.
+
+| | Recipe 4, 0.2.0 MTP | This boot |
+| --- | --- | --- |
+| gen ≥ 200 | 147.7, median 145.2, n=26, 44,420 tokens | **160.0**, median **155.9**, 115.6–219.2, n=710, 916,328 tokens |
+| Prompts 100k–200k, gen ≥ 200 | 142.9, median 135.4, n=9 | **157.7**, median 154.9, n=413, 501,872 tokens |
+| Prompts 50k–90k, gen ≥ 200 | 154.8, median 157.5, n=7 | **165.7**, median 163.0, n=143, 177,463 tokens |
+| Prompts ≥ 200k, gen ≥ 200 | 140.6 on four prompts | **153.2**, median 151.9, n=82, 122,625 tokens |
+| Fresh reads ≥ 100k | 6,950.6, best 7,084.6, n=9 | **7,250.8**, median 7,281.9, best **7,456.1**, n=13, 2,391,487 tokens |
+| Fresh reads ≥ 20k | 6,809.5, n=20 | **7,061.6**, median 7,110.8, n=26, 3,139,934 tokens |
+| Drafts, gen ≥ 200 | 61.7% | **67.1%** (576,407 / 858,507) |
+| Decode under 50 tok/s | none | none |
+
+852 requests finished in the boot besides the bench (936,067 generated tokens, including answers under 200 tokens).
+
+### Cold bench, same boot, 08:55 UTC
+
+Temperature 0, 256 tokens, nothing reused. Engine lines:
+
+| Prompt tokens | Prefill | Decode | Drafts |
+| --- | --- | --- | --- |
+| 8,244 | 4,672.3 tok/s (1,764 ms) | 180.0 tok/s | 122/171 |
+| 32,820 | 7,010.4 tok/s (4,682 ms) | 179.6 tok/s | 110/168 |
+| 131,124 | 7,468.9 tok/s (17,556 ms) | 181.2 tok/s | 114/164 |
+| 196,660 | 7,105.8 tok/s (27,676 ms) | 169.4 tok/s | 108/170 |
+| 249,908 | 6,941.9 tok/s (36,000 ms) | 179.4 tok/s | 120/172 |
+
+The client clock on the 249,908 row was 6,922 tok/s prefill and 179.9 tok/s decode. Short prefill is the slow cell, as it was on the older benches. From 32k tokens up, prefill is 7,010–7,469 tok/s. The 196,660 decode cell is the low one at 169.4. The agent table is the one for real sessions. The bench is one cold pass.

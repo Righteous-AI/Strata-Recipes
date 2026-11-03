@@ -23,4 +23,6 @@ RTX 5090  32,607 MiB, compute capability 12.0, power limit 600 W
 - P-core energy preference is `performance` on CPUs 0–7 only. CPUs 8–19 stay `balance_performance`.
 - A 500 W GPU power cap cut a 32,779-token prefill from 8,046 tok/s to 7,666 tok/s on the speed recipe. The card stays at 600 W. Decode of a few hundred tokens drew about 220–370 W, so the cap was not a decode problem.
 
-The 0.1.45 tree is tag v0.1.45, commit `477ac13`. The 0.2.0 tree is tag v0.2.0-beta, commit `3d1fb480`, engine package string `0.1.45.3`, `BUILD.json` architectures `[120]`. llama.cpp is the pin both trees name: `3cf03257f219afbe7334045ff7c6a06ac68c627d`. The configs and the unit refer to the active tree as `/opt/strata/Strata`.
+The 0.1.45 tree is tag v0.1.45, commit `477ac13`. The 0.2.0 tree is tag v0.2.0-beta, commit `3d1fb480`, engine package string `0.1.45.3`, `BUILD.json` architectures `[120]`. llama.cpp is the pin those trees name: `3cf03257f219afbe7334045ff7c6a06ac68c627d`. The configs and the unit refer to the active tree as `/opt/strata/Strata`.
+
+The running tree on 2026-11-03 is tag v0.2.10, commit `ffa80d73`, engine `0.1.56`. The same llama pin. The DFlash2 boot logged 9,078 expert slots at `--vram-reserve-mib 192`, with 141 MiB free at request start. The 9,075-slot line in the diagram above is the 0.2.0 measurement at reserve 512.

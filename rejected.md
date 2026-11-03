@@ -40,4 +40,19 @@ A flag stayed when it beat the current best by more than about 3% on the metric 
 | w4a4x2 | A doc microbench. This binary accepts only `w4a8`, `w4a4`, and `fp16`. |
 | `STRATA_PF_FUSED` | The fused prompt experts cover IQ2_S, IQ3_XXS, IQ3_S, and IQ4_XS. This pack is NVFP4. Setting `=1` does not add an NVFP4 kernel. |
 | `STRATA_SM86_PERF`, `STRATA_SM60_PERF`, HIP and Intel switches, GGUF prefetch | Not this card, and not an `experts.bin` arena. |
-| `--vision` | The GPU reader holds on the order of 1.5 GiB and would shrink the expert cache. Pictures stay off. FP4-Local's vision tower was not converted. |
+| `--vision` | The GPU reader holds on the order of 1.5 GiB and would shrink the expert cache. Pictures stay off this text server. FP4-Local's vision tower was not converted. |
+
+## v0.2.10, read or tried, and not kept
+
+The running server is recipe 5. These stayed off on that boot.
+
+| Flag | Why it is off |
+| --- | --- |
+| `STRATA_ROUTE_PRIOR` | v0.2.8 set the default to 0 on every card. This 32 GB card was already 0. The 12 GB speedup is a different default, and the published check passed fewer agent tasks with it on. |
+| Raising `--vram-reserve-mib` to 563, 576, or 704 | The 08:54 boot asked for that because 141 MiB was free. Raising it deletes expert slots. The reserve stayed 192. No request in that boot fell under 50 tok/s. |
+| `--pool-affinity measure` | 13 workers already pin every performance core plus six efficiency cores. The flag would not drop the worker count. |
+| `STRATA_PREFILL_NVFP4=w4a4` | Still the quality cut. Decode was already w4a8. |
+| `STRATA_ROUTE_TAIL_SKIP=7` | Still off. |
+| `STRATA_GDN_TC`, `STRATA_GDN_CONVL2`, `STRATA_GR_R2` | Named as 0. Unsetting them turns the fast kernels on. Those graphs are what killed earlier boots. |
+| The iGPU as a second card | One engine drives one make of card. The integrated GPU is not a second 5090. |
+| `--spec 6` on the old MTP stack | The 0.1.45 row above still stands for MTP. DFlash2 on v0.2.10 keeps spec 6. That is a different drafter. |

@@ -1,4 +1,4 @@
-# Recipe 4 — FP4-Local, the running server
+# Recipe 4 — FP4-Local, 0.2.0 MTP
 
 Strata 0.2.0-beta, NVIDIA Qwen3.8-Flash-Next-FP4-Local. The weights were retrained with quantization-aware distillation (ModelOpt 0.47). The serve flags are the quality set from [recipe 3](03-nvfp4-0.2.0.md): `w4a8`, tail skip 0, context 262,144, `auto:32768`, kv int8, kv-resident 32,768, reserve 512, 13 workers, spec 4, spec-min-p 0.5, adapt 1 / 160 / 0.97. The table below is the 20:44 UTC boot, which used 19 workers.
 
