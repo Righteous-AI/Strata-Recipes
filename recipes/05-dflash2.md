@@ -52,6 +52,6 @@ No `--mtp` line. The selector pack is 339,694,592 bytes, sha256 `4a42b98220ea788
 
 Environment added on this tag, and set to 0 so the fast kernels stay off: `STRATA_GDN_TC=0`, `STRATA_GDN_CONVL2=0`, `STRATA_GR_R2=0`. `STRATA_GDN_CHUNKED=1` stays. `STRATA_ROUTE_PRIOR` stays unset.
 
-Config: [`configs/strata-fp4-local-dflash2.json`](../configs/strata-fp4-local-dflash2.json). Unit: [`services/strata-engine-dflash2.service`](../services/strata-engine-dflash2.service). Model name: `qwen3.8-flash-next-fp4-local`. The paths in the repo use `/opt/strata`. This host runs the same flags from `/home/righteous/inference/Strata`.
+Config: [`configs/strata-fp4-local-dflash2.json`](../configs/strata-fp4-local-dflash2.json). Unit: [`services/strata-engine-dflash2.service`](../services/strata-engine-dflash2.service). Model name: `qwen3.8-flash-next-fp4-local`. The paths in the repo use `/opt/strata`. Point `exe`, `cwd`, the profile, the vocab, and the unit at the tree you built.
 
 Pictures stay off this server. One unit binds port 12345. The MTP rollback is recipe 4's unit, with its reserve at 288 on the host that measured this boot.
