@@ -26,3 +26,5 @@ RTX 5090  32,607 MiB, compute capability 12.0, power limit 600 W
 The 0.1.45 tree is tag v0.1.45, commit `477ac13`. The 0.2.0 tree is tag v0.2.0-beta, commit `3d1fb480`, engine package string `0.1.45.3`, `BUILD.json` architectures `[120]`. llama.cpp is the pin those trees name: `3cf03257f219afbe7334045ff7c6a06ac68c627d`. The configs and the unit refer to the active tree as `/opt/strata/Strata`.
 
 The running tree on 2026-11-03 is tag v0.2.10, commit `ffa80d73`, engine `0.1.56`. The same llama pin. The DFlash2 boot logged 9,078 expert slots at `--vram-reserve-mib 192`, with 141 MiB free at request start. The 9,075-slot line in the diagram above is the 0.2.0 measurement at reserve 512.
+
+As of 2026-11-07 the running tree is tag v0.2.12, commit `146df3c4`, engine `0.1.58`. The machine gained a driver and a toolkit since the paragraphs above were written: open kernel module **620.70.06**, CUDA toolkit **13.5** with nvcc V13.5.37 at `/usr/local/cuda-13.5`, kernel `7.0.0-42-generic`. The engine was rebuilt for `sm_120` against that toolkit. Board, CPU, memory, GPU and the 600 W power limit are unchanged.

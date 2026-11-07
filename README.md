@@ -1,11 +1,11 @@
 # Strata recipes — Qwen3.8-Flash-Next on an RTX 5090
 
 **Hardware:** ASUS ProArt Z890 · Intel Core Ultra 7 265K · 128 GB DDR5-5200 · RTX 5090 32 GB · Samsung 9100 PRO
-**Engine:** [Strata](https://github.com/Niko1221/Strata) v0.2.10, engine `0.1.56`, built for sm_120
-**What is running:** [recipe 5](recipes/05-dflash2.md), NVIDIA's retrained FP4-Local weights, DFlash2, quality flags
-**Measured:** 2026-10-17 through 2026-11-03
+**Engine:** [Strata](https://github.com/Niko1221/Strata) v0.2.12, engine `0.1.58`, built for sm_120 on CUDA 13.5
+**What is running:** [recipe 6](recipes/06-cuda135-v0212.md), the recipe 5 server on v0.2.12: NVIDIA's retrained FP4-Local weights, DFlash2, quality flags
+**Measured:** 2026-10-17 through 2026-11-07
 
-Five serve recipes on one machine. Two are the 0.1.45 pair (fastest, then the quality cut). Two are 0.2.0 (plain NVIDIA NVFP4, then FP4-Local with MTP). Recipe 5 is v0.2.10, the same FP4-Local pack, with DFlash2. The unit in [`services/strata-engine-dflash2.service`](services/strata-engine-dflash2.service) starts recipe 5.
+Six serve recipes on one machine. Two are the 0.1.45 pair (fastest, then the quality cut). Two are 0.2.0 (plain NVIDIA NVFP4, then FP4-Local with MTP). Recipe 5 is v0.2.10, the same FP4-Local pack, with DFlash2. Recipe 6 is that same server on v0.2.12 and CUDA 13.5, with every flag held still. The unit in [`services/strata-engine-dflash2.service`](services/strata-engine-dflash2.service) starts either of them.
 
 The decode and long-prefill rates in the table below are from a real agentic coding pipeline: multi-turn sessions, tool calls, and prompts from a few thousand tokens up past 200k. They are not llama-benchy runs, not aiperf runs, and not a repeated pangram. Each row is a finished `strata serve:` line from those sessions. A separate [bench section](comparisons.md#controlled-benches) holds the greedy prompts that were sent on purpose. Those benches are marked, and they are not the headline.
 
@@ -30,6 +30,8 @@ STRATA_GR_R2=0
 Config: [`configs/strata-fp4-local-dflash2.json`](configs/strata-fp4-local-dflash2.json). Unit: [`services/strata-engine-dflash2.service`](services/strata-engine-dflash2.service).
 
 On the 2026-11-03 08:54 UTC boot, real agent traffic decoded at **160.0 tok/s** (gen ≥ 200, median 155.9, n=710) and read fresh prompts of 100k tokens and up at **7,251 tok/s** (n=13, best 7,456). A cold 249,908-token prompt on that same boot, nothing reused, prefilled at 6,942 tok/s and decoded at 179.4 tok/s. Draft acceptance on the agent set was 67.1%. Recipe 4, the 0.2.0 MTP boot, remains the previous record at 147.7 tok/s.
+
+Recipe 6 is that server on the current tag, v0.2.12 / engine `0.1.58`, rebuilt against CUDA 13.5. Its cold bench of 2026-11-07 12:27 UTC ran the same five prompts on an idle card: prefill 5,712.7 tok/s at 8,244 prompt tokens and 7,221–7,725 tok/s from 32,820 up, decode 156.6–178.6 tok/s, TTFT 1.443 s at 8,244 and 34.607 s at 249,908. That pass is one cold run per length, so it sits beside recipe 5's numbers rather than replacing them.
 
 NVIDIA's published card for these weights, against the BF16 model: GPQA Diamond 91.5% versus 92.2%, ToolEvalBench 88.7% versus 89.4%. Strata ranks their own GPTQ NVFP4 pack as the best quality of the three NVFP4 versions, and describes QAD as slightly faster on short prompts when every expert fits in VRAM. This card holds 9,075 of 24,576 experts. The table below is this host, not that 72 GB card.
 
@@ -143,6 +145,7 @@ recipes/02-quality.md             0.1.45, w4a8, tail skip 0
 recipes/03-nvfp4-0.2.0.md         0.2.0, plain NVIDIA NVFP4
 recipes/04-fp4-local.md           0.2.0, FP4-Local, MTP
 recipes/05-dflash2.md             v0.2.10, FP4-Local, DFlash2, the running server
+recipes/06-cuda135-v0212.md       v0.2.12 (0.1.58) on CUDA 13.5, same flags, the current tag
 configs/strata-fp4-local.json     recipe 4
 configs/strata-fp4-local-dflash2.json  recipe 5
 configs/strata-nvfp4-nvidia.json  recipe 3

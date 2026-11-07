@@ -230,3 +230,25 @@ Temperature 0, 256 tokens, nothing reused. Engine lines:
 | 249,908 | 6,941.9 tok/s (36,000 ms) | 179.4 tok/s | 120/172 |
 
 The client clock on the 249,908 row was 6,922 tok/s prefill and 179.9 tok/s decode. Short prefill is the slow cell, as it was on the older benches. From 32k tokens up, prefill is 7,010–7,469 tok/s. The 196,660 decode cell is the low one at 169.4. The agent table is the one for real sessions. The bench is one cold pass.
+
+## v0.2.12 on CUDA 13.5, FP4-Local DFlash2, 2026-11-07
+
+Tag v0.2.12, commit `146df3c4`, engine `0.1.58`, rebuilt for `sm_120` with nvcc V13.5.37, driver 620.70.06, kernel 7.0.0-42-generic. Engine binary sha256 `40dacca89b3469cd5ce20cce50cd00aa2a300d80a0f0f184ac947077530351eb`. The flags and environment are recipe 5's, unchanged. [Recipe 6](recipes/06-cuda135-v0212.md).
+
+### Cold bench, 12:27 UTC
+
+Five cold prompts, temperature 0, 256 tokens out, nothing reused, idle card, client clock, `cached_tokens` 0 on every row. Same five saved prompts the older benches used.
+
+| Prompt tokens | TTFT | Prefill | Decode | Engine line | Expert cache |
+| --- | --- | --- | --- | --- | --- |
+| 8,244 | 1.443 s | 5,712.7 tok/s | 156.6 tok/s | 156.5 tok/s | 91.6% |
+| 32,820 | 4.531 s | 7,244.0 tok/s | 174.1 tok/s | 173.7 tok/s | 95.6% |
+| 131,124 | 16.975 s | 7,724.6 tok/s | 174.1 tok/s | 173.7 tok/s | 96.1% |
+| 196,660 | 25.905 s | 7,591.6 tok/s | 169.8 tok/s | 169.4 tok/s | 95.8% |
+| 249,908 | 34.607 s | 7,221.3 tok/s | 178.6 tok/s | 178.0 tok/s | 96.8% |
+
+Against recipe 5's 2026-11-03 cold pass, prefill from 32,820 up is level (7,221–7,725 against 7,010–7,469) and the 8,244 row is about 22% faster. Decode is 2 to 8 tok/s lower on four of the five rows. One cold pass a piece does not settle that; recipe 5's pass was followed by 852 agent requests, and the agent table is the figure that carries weight. This build logs the expert-cache hit and no draft-acceptance counter, so acceptance for these rows is unavailable. Recipe 5 keeps the last acceptance numbers for this server.
+
+### The same card, another engine
+
+On the same day the same five prompts went to a TensorFold CUDA server on this card, at a 262,144 window, one stream. Different model and different engine: a dense 27B in EXL3 6.0 bpw against this MoE FP4-Local pack. TensorFold decoded 177.4 tok/s at 8,244 and 119.9–128.2 tok/s from 131,124 up, and prefilled 1,100–1,661 tok/s, its EXL3 prompt path running 3.4 to 6.6 times slower here than this server's MoE prefill. Write-up and its draft counters: [TensorFold-Recipes](https://github.com/Righteous-AI/TensorFold-Recipes).
